@@ -9,8 +9,7 @@
     <style>
         body { background-color: #0d0e12; color: #c5c6c7; font-family: sans-serif; }
         .card { background-color: #16171d; border: 1px solid #20222b; }
-        .input-field { background-color: #0d0e12; border: 1px solid #45a29e; color: #ffffff; padding: 10px; width: 100%; border-radius: 6px; }
-        .table-hdr { background-color: #1c1d25; }
+        .input-field { background-color: #0d0e12; border: 1px solid #45a29e; color: #ffffff; padding: 8px; width: 100%; border-radius: 6px; }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -19,87 +18,68 @@
         <h1 class="text-2xl font-black text-white"><i class="fa-solid fa-chart-line text-cyan-400"></i> ZIYAD FOREX TRADING JOURNAL</h1>
     </header>
 
-    <!-- Financial Gateway -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div class="card p-6 rounded-xl border border-gray-800">
-            <h2 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-wallet text-sky-400"></i> Account Summary</h2>
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div><p class="text-[10px] text-gray-500 uppercase font-bold">Deposits</p><div id="statTotalDeposits" class="text-xl font-black text-emerald-500">$0.00</div></div>
-                <div><p class="text-[10px] text-gray-500 uppercase font-bold">Withdrawals</p><div id="statTotalWithdrawals" class="text-xl font-black text-rose-500">$0.00</div></div>
-            </div>
-            <div class="pt-4 border-t border-gray-800">
-                <p class="text-[10px] text-gray-500 uppercase font-bold">Current Net Balance</p>
-                <div id="statCurrentBalance" class="text-3xl font-black text-white">$5,000.00</div>
-            </div>
-        </div>
+    <!-- Account Summary -->
+    <div class="card p-6 rounded-xl mb-8">
+        <h2 class="text-lg font-bold text-white mb-4">Account Overview</h2>
+        <div id="statCurrentBalance" class="text-4xl font-black text-white">$0.00</div>
+    </div>
 
-        <div class="card p-6 rounded-xl border border-gray-800">
-            <h2 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-exchange-alt text-amber-400"></i> Transaction Engine</h2>
-            <input type="number" id="transAmount" placeholder="Enter Amount (USD)" class="input-field mb-3">
-            <div class="grid grid-cols-2 gap-2 mb-4">
-                <button onclick="processTransaction('deposit')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded">Deposit</button>
-                <button onclick="processTransaction('withdraw')" class="bg-rose-600 hover:bg-rose-500 text-white font-bold py-2 rounded">Withdraw</button>
-            </div>
-            <button onclick="resetData()" class="text-xs text-gray-600 uppercase font-bold hover:text-rose-500">Reset All Data</button>
+    <!-- Backtesting Form -->
+    <div class="card p-6 rounded-xl mb-8">
+        <h2 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-pen-nib text-cyan-400"></i> Add New Trade</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <input type="text" id="pair" placeholder="Pair (e.g. XAUUSD)" class="input-field">
+            <select id="type" class="input-field"><option>Buy</option><option>Sell</option></select>
+            <input type="number" id="risk" placeholder="Risk Amount ($)" class="input-field">
+            <input type="number" id="rr" placeholder="RR Ratio" class="input-field">
+            <select id="outcome" class="input-field"><option>Win</option><option>Loss</option></select>
+            <button onclick="addTrade()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2 rounded">Save Trade</button>
         </div>
     </div>
 
-    <!-- Trade History -->
-    <div class="card rounded-lg overflow-hidden">
-        <div class="p-4 border-b border-gray-800"><h3 class="font-bold text-white uppercase">History</h3></div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm">
-                <thead><tr class="table-hdr text-gray-400"><th class="p-3">Type</th><th class="p-3">Amount</th></tr></thead>
-                <tbody id="historyLog" class="text-gray-300"></tbody>
-            </table>
-        </div>
+    <!-- Trade History Table -->
+    <div class="card rounded-xl overflow-hidden">
+        <table class="w-full text-left">
+            <thead class="bg-gray-800 text-gray-400 text-xs uppercase">
+                <tr><th class="p-3">Pair</th><th class="p-3">Type</th><th class="p-3">Risk</th><th class="p-3">RR</th><th class="p-3">Outcome</th></tr>
+            </thead>
+            <tbody id="tradeLog" class="text-gray-300"></tbody>
+        </table>
     </div>
 
     <script>
-        let deposits = parseFloat(localStorage.getItem('journal_deposits')) || 0;
-        let withdraws = parseFloat(localStorage.getItem('journal_withdrawals')) || 0;
-        let history = JSON.parse(localStorage.getItem('journal_history')) || [];
-        const baseCapital = 5000;
+        let trades = JSON.parse(localStorage.getItem('ziyad_trades')) || [];
 
-        function processTransaction(type) {
-            const amountInput = document.getElementById('transAmount');
-            const amount = parseFloat(amountInput.value);
-            if(isNaN(amount) || amount <= 0) return alert("እባክዎ ትክክለኛ መጠን ያስገቡ");
-
-            if(type === 'deposit') { deposits += amount; } 
-            else { withdraws += amount; }
+        function addTrade() {
+            const trade = {
+                pair: document.getElementById('pair').value,
+                type: document.getElementById('type').value,
+                risk: document.getElementById('risk').value,
+                rr: document.getElementById('rr').value,
+                outcome: document.getElementById('outcome').value
+            };
             
-            history.push({type, amount, date: new Date().toLocaleDateString()});
-            localStorage.setItem('journal_deposits', deposits);
-            localStorage.setItem('journal_withdrawals', withdraws);
-            localStorage.setItem('journal_history', JSON.stringify(history));
+            if(!trade.pair) return alert("እባክዎ Pair ያስገቡ");
             
-            amountInput.value = "";
-            updateUI();
+            trades.push(trade);
+            localStorage.setItem('ziyad_trades', JSON.stringify(trades));
+            renderTrades();
         }
 
-        function updateUI() {
-            document.getElementById('statTotalDeposits').innerText = '$' + deposits.toLocaleString(undefined, {minimumFractionDigits: 2});
-            document.getElementById('statTotalWithdrawals').innerText = '$' + withdraws.toLocaleString(undefined, {minimumFractionDigits: 2});
-            let balance = baseCapital + deposits - withdraws;
-            document.getElementById('statCurrentBalance').innerText = '$' + balance.toLocaleString(undefined, {minimumFractionDigits: 2});
-            
-            document.getElementById('historyLog').innerHTML = history.map(h => `
+        function renderTrades() {
+            const log = document.getElementById('tradeLog');
+            log.innerHTML = trades.map(t => `
                 <tr class="border-b border-gray-800">
-                    <td class="p-3 capitalize">${h.type}</td>
-                    <td class="p-3">$${h.amount.toLocaleString()}</td>
+                    <td class="p-3 font-bold">${t.pair}</td>
+                    <td class="p-3 ${t.type === 'Buy' ? 'text-emerald-500' : 'text-rose-500'}">${t.type}</td>
+                    <td class="p-3">$${t.risk}</td>
+                    <td class="p-3">${t.rr}</td>
+                    <td class="p-3"><span class="${t.outcome === 'Win' ? 'text-emerald-500' : 'text-rose-500'} font-black">${t.outcome}</span></td>
                 </tr>
             `).join('');
         }
 
-        function resetData() {
-            if(confirm("መረጃውን በሙሉ ማጥፋት ይፈልጋሉ?")) {
-                localStorage.clear();
-                location.reload();
-            }
-        }
-
-        updateUI();
+        renderTrades();
     </script>
 </body>
 </html>
