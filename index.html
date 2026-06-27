@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ziyad Forex Trading Journal</title>
+    <title>Ziyad Forex Trading Journal - Live</title>
     <!-- Tailwind CSS v4 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -42,7 +42,7 @@
             <h1 class="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
                 <i class="fa-solid fa-chart-line text-sky-500 dark:text-cyan-400"></i> ZIYAD FOREX TRADING JOURNAL
             </h1>
-            <p class="text-xs text-sky-600 dark:text-cyan-400 font-mono mt-1">Workspace // Backtesting & Analytics Engine</p>
+            <p class="text-xs text-sky-600 dark:text-cyan-400 font-mono mt-1">Workspace // Live Account & Analytics Portfolio</p>
         </div>
         <div class="flex flex-wrap gap-2">
             <button onclick="toggleDisplayTheme()" class="bg-amber-500 dark:bg-indigo-600 text-white text-xs font-bold px-3 py-2 rounded flex items-center gap-1.5 transition cursor-pointer">
@@ -60,13 +60,74 @@
         </div>
     </header>
 
-    <!-- Core Indicators Layout -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div class="main-card p-4 rounded-xl relative overflow-hidden">
-            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Net P&L</span>
-            <div id="statNetPL" class="text-xl md:text-2xl font-black mt-2 text-emerald-500 font-mono">$0.00</div>
+    <!-- Account Balances Configuration -->
+    <div class="main-card p-4 rounded-xl mb-6 grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+        <div>
+            <label class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">Starting Capital Base</label>
+            <div class="relative flex items-center">
+                <span class="absolute left-2.5 text-xs font-bold text-slate-400 font-mono">$</span>
+                <input type="number" id="startingBalanceInput" oninput="updateDashboard()" value="5000" class="w-full pl-6 pr-2 py-1.5 text-xs rounded input-field font-mono font-bold">
+            </div>
         </div>
-        <div class="main-card p-4 rounded-xl relative overflow-hidden">
+        <div class="p-2 border-l border-slate-200 dark:border-gray-800 pl-4">
+            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Current Account Balance</span>
+            <div id="statCurrentBalance" class="text-lg font-black mt-1 text-slate-900 dark:text-white font-mono">$5,000.00</div>
+        </div>
+        <div class="p-2 border-l border-slate-200 dark:border-gray-800 pl-4">
+            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Account P&L Growth</span>
+            <div id="statGrowthPercent" class="text-lg font-black mt-1 text-emerald-500 font-mono">+0.00%</div>
+        </div>
+        <div class="p-2 border-l border-slate-200 dark:border-gray-800 pl-4">
+            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Net P&L Result</span>
+            <div id="statNetPL" class="text-lg font-black mt-1 text-emerald-500 font-mono">$0.00</div>
+        </div>
+    </div>
+
+    <!-- Live Deposit Engine Box -->
+    <div class="main-card p-5 rounded-xl mb-6 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start border border-sky-500/20 bg-gradient-to-br from-sky-500/5 to-transparent">
+        <div class="lg:col-span-2">
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-wallet text-emerald-500"></i> ፈንድ መጨመሪያ (Deposit Funds Gateway)
+            </h3>
+            <p class="text-xs text-slate-400 leading-relaxed mb-4">
+                ወደ ትሬዲንግ አካውንትህ ወይም ክሪፕቶ ዋሌትህ ገንዘብ ስታስገባ በጆርናልህ ላይ እንዲመዘገብና ባላንስህ ላይ እንዲደመር እዚህ ያስገቡ። በቀጥታ ወደ ብሮከርህ ገጽ ለመሄድ ከታች ያሉትን ሊንኮች ተጠቀም።
+            </p>
+            <div class="flex flex-wrap gap-2">
+                <a href="https://www.exness.com" target="_blank" class="bg-amber-500 hover:bg-amber-400 text-black text-xs font-black px-4 py-2 rounded flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Exness Deposit
+                </a>
+                <a href="https://www.bybit.com" target="_blank" class="bg-zinc-900 hover:bg-zinc-800 text-amber-500 border border-amber-500/30 text-xs font-black px-4 py-2 rounded flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Bybit Deposit
+                </a>
+                <a href="https://www.okx.com" target="_blank" class="bg-white hover:bg-slate-100 text-black text-xs font-black px-4 py-2 rounded flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> OKX Deposit
+                </a>
+            </div>
+        </div>
+        <div class="w-full bg-slate-900/40 p-4 rounded-lg border border-slate-200 dark:border-gray-800">
+            <form id="depositForm" onsubmit="handleLiveDeposit(event)" class="flex flex-col gap-2.5 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-400 mb-1">Deposit Amount (USD)</label>
+                    <input type="number" id="depositAmount" placeholder="e.g. 500" min="1" step="0.01" class="w-full p-2 rounded input-field font-mono font-bold" required>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-400 mb-1">Destination Account</label>
+                    <select id="depositAccountType" class="w-full p-2 rounded input-field">
+                        <option value="Exness">Exness Live (Forex)</option>
+                        <option value="Bybit">Bybit Funding (Crypto)</option>
+                        <option value="FundedNext">FundedNext (Challenge Account)</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded transition cursor-pointer uppercase text-[11px] tracking-wider">
+                    <i class="fa-solid fa-plus-circle"></i> ዲፖዚት መዝግብ
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Core Performance Analytics Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="main-card p-4 rounded-xl relative overflow-hidden flex flex-col justify-center">
             <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Win Rate (Win %)</span>
             <div id="statWinRate" class="text-xl md:text-2xl font-black mt-2 text-slate-900 dark:text-white font-mono">0.00%</div>
         </div>
@@ -79,20 +140,21 @@
         </div>
     </div>
 
-    <!-- Pair Performance Summary Header Only -->
+    <!-- Pair Performance Metrics Panel -->
     <div class="main-card p-4 rounded-xl mb-8">
         <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <i class="fa-solid fa-layer-group text-sky-500 dark:text-cyan-400"></i> Pair Performance Metrics
         </h3>
         <div id="pairPerformanceContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            <div class="p-3 text-center text-slate-400 dark:text-gray-500 italic text-xs col-span-full">No trading history recorded.</div>
+            <div class="p-3 text-center text-slate-400 dark:text-gray-500 italic text-xs col-span-full">No active trade analytics found.</div>
         </div>
     </div>
 
+    <!-- Main Entry Module Area -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
         <div class="main-card p-5 rounded-lg flex flex-col gap-4">
             <h2 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider border-b border-slate-100 dark:border-gray-800 pb-2">
-                <i class="fa-solid fa-pen-to-square text-sky-500 dark:text-cyan-400"></i> Log New Trade
+                <i class="fa-solid fa-pen-to-square text-sky-500 dark:text-cyan-400"></i> Log Live Execution Trade
             </h2>
             <form id="tradeForm" onsubmit="saveTradeLog(event)" class="flex flex-col gap-3 text-xs">
                 <div class="grid grid-cols-2 gap-2">
@@ -162,23 +224,21 @@
                 <div class="border-t border-slate-100 dark:border-gray-800 my-1 pt-2">
                     <label class="block font-bold mb-1 text-sky-600 dark:text-cyan-400">Chart Images (Up to 5 photos - Saved in IndexedDB)</label>
                     <div class="flex flex-col gap-1.5 mt-2 text-[11px]">
-                        <div><span class="text-slate-400 font-medium">1. Daily/HTF Bias:</span> <input type="file" id="imgSetup1" accept="image/*" class="text-slate-500 text-[10px]"></div>
-                        <div><span class="text-slate-400 font-medium">2. 4H/1H Structure:</span> <input type="file" id="imgSetup2" accept="image/*" class="text-slate-500 text-[10px]"></div>
-                        <div><span class="text-slate-400 font-medium">3. 15m/5m POI:</span> <input type="file" id="imgSetup3" accept="image/*" class="text-slate-500 text-[10px]"></div>
-                        <div><span class="text-slate-400 font-medium">4. 1m Entry Setup:</span> <input type="file" id="imgSetup4" accept="image/*" class="text-slate-500 text-[10px]"></div>
-                        <div><span class="text-slate-400 font-medium">5. Final Outcome:</span> <input type="file" id="imgSetup5" accept="image/*" class="text-slate-500 text-[10px]"></div>
+                        <div><span class="text-slate-400 font-medium">1. HTF Direction:</span> <input type="file" id="imgSetup1" accept="image/*" class="text-slate-500 text-[10px]"></div>
+                        <div><span class="text-slate-400 font-medium">2. Execution Trigger:</span> <input type="file" id="imgSetup2" accept="image/*" class="text-slate-500 text-[10px]"></div>
+                        <div><span class="text-slate-400 font-medium">3. Post Management:</span> <input type="file" id="imgSetup3" accept="image/*" class="text-slate-500 text-[10px]"></div>
                     </div>
                 </div>
 
                 <button type="submit" class="w-full mt-2 bg-gradient-to-r from-sky-500 to-emerald-500 dark:from-cyan-500 dark:to-teal-500 text-white dark:text-black font-black uppercase tracking-wider py-2.5 rounded transition shadow-lg cursor-pointer">
-                    Add to Journal
+                    Add Live Trade Log
                 </button>
             </form>
         </div>
 
         <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="main-card p-4 rounded-lg flex flex-col justify-between">
-                <span class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider block mb-2"><i class="fa-solid fa-chart-pie text-sky-500 dark:text-cyan-400"></i> Sessions Layout</span>
+                <span class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider block mb-2"><i class="fa-solid fa-chart-pie text-sky-500 dark:text-cyan-400"></i> Active Trading Sessions</span>
                 <div class="grid grid-cols-3 text-center gap-2 mt-4 my-auto">
                     <div class="p-4 rounded bg-amber-500/10 border border-amber-500/20"><div class="text-[10px] font-bold text-amber-500 uppercase">Asian</div><div id="asianLabel" class="text-2xl font-black text-slate-900 dark:text-white mt-1">0</div></div>
                     <div class="p-4 rounded bg-blue-500/10 border border-blue-500/20"><div class="text-[10px] font-bold text-blue-500 uppercase">London</div><div id="londonLabel" class="text-2xl font-black text-slate-900 dark:text-white mt-1">0</div></div>
@@ -186,16 +246,17 @@
                 </div>
             </div>
             <div class="main-card p-4 rounded-lg flex flex-col justify-between">
-                <span class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider block mb-2"><i class="fa-solid fa-chart-bar text-sky-500 dark:text-cyan-400"></i> Pair P&L Breakdown</span>
+                <span class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider block mb-2"><i class="fa-solid fa-chart-bar text-sky-500 dark:text-cyan-400"></i> Pair Profit/Loss Breakdown</span>
                 <div class="h-48 flex items-center justify-center relative"><canvas id="pairBarChart"></canvas></div>
             </div>
         </div>
     </div>
 
+    <!-- Yearly Matrix Panel View -->
     <div class="main-card p-4 rounded-lg mb-8">
         <div class="flex items-center justify-between border-b border-slate-100 dark:border-gray-800 pb-2 mb-3">
             <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                <i class="fa-solid fa-table-cells text-sky-500 dark:text-cyan-400"></i> Yearly / Monthly Performance Matrix
+                <i class="fa-solid fa-table-cells text-sky-500 dark:text-cyan-400"></i> Yearly Performance Grid
             </h3>
         </div>
         <div class="overflow-x-auto">
@@ -215,17 +276,18 @@
         </div>
     </div>
 
+    <!-- Live Records Historical Database Table -->
     <div class="main-card rounded-lg overflow-hidden">
         <div class="p-4 border-b border-slate-100 dark:border-gray-800 bg-slate-50 dark:bg-gray-900/40">
             <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                <i class="fa-solid fa-database text-sky-500 dark:text-cyan-400"></i> Simulation History Logs
+                <i class="fa-solid fa-database text-sky-500 dark:text-cyan-400"></i> Real Account Execution History
             </h3>
         </div>
 
         <div class="p-3 bg-slate-100/50 dark:bg-gray-900/25 border-b border-slate-200 dark:border-gray-800 flex flex-wrap items-center justify-between gap-4 text-xs">
             <div class="flex flex-wrap gap-3">
                 <div class="flex items-center gap-1.5">
-                    <label class="font-bold text-slate-400">Filter by Pair:</label>
+                    <label class="font-bold text-slate-400">Pair:</label>
                     <select id="filterPair" onchange="updateDashboard()" class="p-1.5 rounded input-field bg-white dark:bg-slate-900">
                         <option value="ALL">All Pairs</option>
                         <option value="EUR/USD">EUR/USD</option>
@@ -235,7 +297,7 @@
                     </select>
                 </div>
                 <div class="flex items-center gap-1.5">
-                    <label class="font-bold text-slate-400">Filter by Outcome:</label>
+                    <label class="font-bold text-slate-400">Outcome:</label>
                     <select id="filterOutcome" onchange="updateDashboard()" class="p-1.5 rounded input-field bg-white dark:bg-slate-900">
                         <option value="ALL">All Outcomes</option>
                         <option value="Win">WIN</option>
@@ -243,20 +305,11 @@
                         <option value="BE">BREAK-EVEN</option>
                     </select>
                 </div>
-                <div class="flex items-center gap-1.5">
-                    <label class="font-bold text-slate-400">Filter by Session:</label>
-                    <select id="filterSession" onchange="updateDashboard()" class="p-1.5 rounded input-field bg-white dark:bg-slate-900">
-                        <option value="ALL">All Sessions</option>
-                        <option value="Asian">Asian</option>
-                        <option value="London">London</option>
-                        <option value="New York">New York</option>
-                    </select>
-                </div>
             </div>
 
             <div class="w-full md:w-64 flex items-center relative">
                 <span class="absolute left-2.5 text-slate-400"><i class="fa-solid fa-magnifying-glass"></i></span>
-                <input type="text" id="searchInput" oninput="updateDashboard()" placeholder="Search strategy or keyword..." class="w-full pl-8 pr-2 py-1.5 rounded input-field bg-white dark:bg-slate-900 text-xs">
+                <input type="text" id="searchInput" oninput="updateDashboard()" placeholder="Search strategy or type..." class="w-full pl-8 pr-2 py-1.5 rounded input-field bg-white dark:bg-slate-900 text-xs">
             </div>
         </div>
 
@@ -267,7 +320,7 @@
                         <th class="p-3">Date</th><th class="p-3">Pair</th><th class="p-3">Type</th>
                         <th class="p-3">Session</th><th class="p-3">Strategy</th><th class="p-3">Risk ($)</th>
                         <th class="p-3">R:R</th><th class="p-3">Net Profit ($)</th><th class="p-3">Outcome</th>
-                        <th class="p-3 text-center">Chart Layout (Hover to zoom)</th><th class="p-3 text-center">Action</th>
+                        <th class="p-3 text-center">Setup Thumbnails</th><th class="p-3 text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody id="tradeLogTable" class="divide-y table-border text-slate-700 dark:text-gray-300 font-medium"></tbody>
@@ -276,29 +329,28 @@
     </div>
 
     <script>
-        // Separate data store key to avoid clash with the backtest journal
-        let backtestTrades = JSON.parse(localStorage.getItem('original_journal_trades')) || [];
+        // Dedicated LocalStorage keys for Live trades and cumulative deposits
+        let liveTrades = JSON.parse(localStorage.getItem('live_journal_trades')) || [];
+        let totalDeposits = parseFloat(localStorage.getItem('live_journal_deposits')) || 0;
+        
         let pairBarChartInstance = null;
         let currentTheme = localStorage.getItem('journal_display_theme') || 'dark';
 
         // IndexedDB Initialization
         let db = null;
-        const dbName = "ZiyadForexImagesDB";
-        const storeName = "trade_images";
+        const dbName = "ZiyadLiveForexImagesDB";
+        const storeName = "live_trade_images";
 
-        const request = indexedDB.open(dbName, 1);
-        request.onupgradeneeded = function(e) {
+        const dbRequest = indexedDB.open(dbName, 1);
+        dbRequest.onupgradeneeded = function(e) {
             let database = e.target.result;
             if (!database.objectStoreNames.contains(storeName)) {
                 database.createObjectStore(storeName, { keyPath: "id" });
             }
         };
-        request.onsuccess = function(e) {
+        dbRequest.onsuccess = function(e) {
             db = e.target.result;
             updateDashboard();
-        };
-        request.onerror = function(e) {
-            console.error("IndexedDB initialization failed.");
         };
 
         document.body.className = "p-4 md:p-8 " + currentTheme;
@@ -372,15 +424,29 @@
             store.delete(tradeId);
         }
 
+        // Handle Manual Live Fund Deposits
+        function handleLiveDeposit(e) {
+            e.preventDefault();
+            const amountInput = document.getElementById('depositAmount');
+            const amount = parseFloat(amountInput.value) || 0;
+            const destAccount = document.getElementById('depositAccountType').value;
+
+            if(amount > 0) {
+                totalDeposits += amount;
+                localStorage.setItem('live_journal_deposits', totalDeposits);
+                amountInput.value = "";
+                alert(`Successfully logged $${amount.toLocaleString()} deposit into ${destAccount}!`);
+                updateDashboard();
+            }
+        }
+
         async function saveTradeLog(e) {
             e.preventDefault();
             
             const imageFiles = [
                 document.getElementById('imgSetup1').files[0],
                 document.getElementById('imgSetup2').files[0],
-                document.getElementById('imgSetup3').files[0],
-                document.getElementById('imgSetup4').files[0],
-                document.getElementById('imgSetup5').files[0]
+                document.getElementById('imgSetup3').files[0]
             ];
             
             const b64Images = await Promise.all(imageFiles.map(file => fileToBase64(file)));
@@ -404,16 +470,16 @@
                 hasImages: validImages.length > 0
             };
 
-            backtestTrades.push(newTrade);
-            localStorage.setItem('original_journal_trades', JSON.stringify(backtestTrades));
+            liveTrades.push(newTrade);
+            localStorage.setItem('live_journal_trades', JSON.stringify(liveTrades));
             document.getElementById('tradeForm').reset();
             updateDashboard();
         }
 
         function removeTradeRecord(id) {
-            if(confirm("Are you sure you want to delete this trade record?")) {
-                backtestTrades = backtestTrades.filter(t => t.id !== id);
-                localStorage.setItem('original_journal_trades', JSON.stringify(backtestTrades));
+            if(confirm("Are you sure you want to delete this live record?")) {
+                liveTrades = liveTrades.filter(t => t.id !== id);
+                localStorage.setItem('live_journal_trades', JSON.stringify(liveTrades));
                 deleteImagesFromIndexedDB(id);
                 updateDashboard();
             }
@@ -430,19 +496,18 @@
 
             const fPair = document.getElementById('filterPair').value;
             const fOutcome = document.getElementById('filterOutcome').value;
-            const fSession = document.getElementById('filterSession').value;
             const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
 
-            const filteredTrades = backtestTrades.filter(t => {
+            const startingBase = parseFloat(document.getElementById('startingBalanceInput').value) || 0;
+
+            const filteredTrades = liveTrades.filter(t => {
                 if (fPair !== "ALL" && t.Pair !== fPair) return false;
                 if (fOutcome !== "ALL" && t.Outcome !== fOutcome) return false;
-                if (fSession && fSession !== "ALL" && t.Session !== fSession) return false;
                 
                 if (keyword !== "") {
                     const pairMatch = t.Pair?.toLowerCase().includes(keyword);
                     const strategyMatch = t.Strategy?.toLowerCase().includes(keyword);
-                    const outcomeMatch = t.Outcome?.toLowerCase().includes(keyword);
-                    if (!pairMatch && !strategyMatch && !outcomeMatch) return false;
+                    if (!pairMatch && !strategyMatch) return false;
                 }
                 return true;
             });
@@ -465,9 +530,7 @@
                 pairPerformanceMap[pair].total += 1;
                 pairPerformanceMap[pair].pnl += t.Net_Profit;
 
-                if (t.Outcome === "Win") {
-                    pairPerformanceMap[pair].wins += 1;
-                }
+                if (t.Outcome === "Win") pairPerformanceMap[pair].wins += 1;
 
                 if (t.Date) {
                     const dateParts = t.Date.split('-'); 
@@ -485,9 +548,19 @@
                 else { bes++; }
             });
 
+            // Math Engine: Capital Base + Earned Net P&L + Added Deposits
+            const currentBalance = startingBase + totalNet + totalDeposits;
+            const growthPercent = startingBase > 0 ? (totalNet / startingBase) * 100 : 0;
+
+            document.getElementById('statCurrentBalance').innerText = '$' + currentBalance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+            const growthEl = document.getElementById('statGrowthPercent');
+            growthEl.innerText = (growthPercent >= 0 ? '+' : '') + growthPercent.toFixed(2) + '%';
+            growthEl.className = `text-lg font-black mt-1 ${growthPercent >= 0 ? 'text-emerald-500' : 'text-rose-500'}`;
+
             const netEl = document.getElementById('statNetPL');
             netEl.innerText = (totalNet >= 0 ? '+' : '') + '$' + totalNet.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            netEl.className = `text-xl md:text-2xl font-black mt-2 ${totalNet >= 0 ? 'text-emerald-500' : 'text-rose-500'}`;
+            netEl.className = `text-lg font-black mt-1 ${totalNet >= 0 ? 'text-emerald-500' : 'text-rose-500'}`;
 
             const totalTradesCount = filteredTrades.length;
             const winRate = totalTradesCount > 0 ? ((wins / totalTradesCount) * 100).toFixed(2) : "0.00";
@@ -498,23 +571,19 @@
             const wlRatio = avgLoss > 0 ? (avgWin / avgLoss).toFixed(2) : (avgWin > 0 ? "Pure Win" : "0.00");
             document.getElementById('statAvgRatio').innerText = wlRatio;
             
-            const winRatioProgressBar = document.getElementById('barWinRatio');
-            if (totalTradesCount > 0) {
-                winRatioProgressBar.style.width = winRate + "%";
-            } else {
-                winRatioProgressBar.style.width = "0%";
-            }
+            document.getElementById('barWinRatio').style.width = totalTradesCount > 0 ? winRate + "%" : "0%";
 
             document.getElementById('asianLabel').innerText = sessionCounts['Asian'] || 0;
             document.getElementById('londonLabel').innerText = sessionCounts['London'] || 0;
             document.getElementById('nyLabel').innerText = sessionCounts['New York'] || 0;
 
+            // Render Sub-Components
             const pairContainer = document.getElementById("pairPerformanceContainer");
             pairContainer.innerHTML = "";
             const activePairsList = Object.keys(pairPerformanceMap);
 
             if (activePairsList.length === 0) {
-                pairContainer.innerHTML = `<div class="p-2 text-center text-slate-400 dark:text-gray-500 italic text-xs col-span-full">No trading history recorded.</div>`;
+                pairContainer.innerHTML = `<div class="p-2 text-center text-slate-400 dark:text-gray-500 italic text-xs col-span-full">No active trade analytics found.</div>`;
             } else {
                 activePairsList.forEach(pName => {
                     const pData = pairPerformanceMap[pName];
@@ -528,10 +597,6 @@
                                 <div class="flex justify-between items-center mb-1">
                                     <span class="font-bold text-xs text-slate-900 dark:text-white">${pName}</span>
                                     <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-200/50 dark:bg-gray-800 text-slate-600 dark:text-gray-400">${pData.total} Trades</span>
-                                </div>
-                                <div class="flex justify-between text-[11px] mt-1">
-                                    <span class="text-slate-400 dark:text-gray-500">Win Rate</span>
-                                    <span class="font-bold text-slate-800 dark:text-gray-200">${pWinRate}%</span>
                                 </div>
                                 <div class="flex justify-between text-[11px] mt-0.5">
                                     <span class="text-slate-400 dark:text-gray-500">Net P&L</span>
@@ -547,7 +612,7 @@
             tableBody.innerHTML = "";
             
             if (filteredTrades.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="11" class="p-8 text-center text-slate-400 dark:text-gray-500 italic">No historical backup match criteria.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="11" class="p-8 text-center text-slate-400 dark:text-gray-500 italic">No operational live trades matching metrics.</td></tr>`;
             } else {
                 const logDisplayOrder = [...filteredTrades].sort((a, b) => new Date(b.Date) - new Date(a.Date));
                 for (const t of logDisplayOrder) {
@@ -560,7 +625,7 @@
                         if (imgs && imgs.length > 0) {
                             imageThumbnailsMarkup = `<div class="flex items-center justify-center gap-1">`;
                             imgs.forEach(b64 => {
-                                imageThumbnailsMarkup += `<img src="${b64}" class="preview-img" alt="Setup Layout" onclick="openImageWindow('${b64}')" />`;
+                                imageThumbnailsMarkup += `<img src="${b64}" class="preview-img" alt="Live Matrix" onclick="openImageWindow('${b64}')" />`;
                             });
                             imageThumbnailsMarkup += `</div>`;
                         }
@@ -598,7 +663,7 @@
             const activeYears = Object.keys(matrixData).sort((a,b) => b-a);
 
             if (activeYears.length === 0) {
-                container.innerHTML = `<tr><td colspan="14" class="p-3 text-slate-400 dark:text-gray-600 italic text-center">No structural matrix available.</td></tr>`;
+                container.innerHTML = `<tr><td colspan="14" class="p-3 text-slate-400 dark:text-gray-600 italic text-center">No performance metrics recorded yet.</td></tr>`;
                 return;
             }
 
@@ -664,15 +729,15 @@
         }
 
         function exportJSONData() {
-            if(backtestTrades.length === 0) {
-                alert("No logs available to export.");
+            if(liveTrades.length === 0) {
+                alert("No live historical data profile found.");
                 return;
             }
-            const blob = new Blob([JSON.stringify(backtestTrades, null, 2)], { type: "application/json" });
+            const blob = new Blob([JSON.stringify({ trades: liveTrades, deposits: totalDeposits }, null, 2)], { type: "application/json" });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `ziyad_journal_backup_${Date.now()}.json`;
+            a.download = `ziyad_live_portfolio_backup_${Date.now()}.json`;
             a.click();
             URL.revokeObjectURL(url);
         }
@@ -684,25 +749,29 @@
             reader.onload = function(e) {
                 try {
                     const parsed = JSON.parse(e.target.result);
-                    if (Array.isArray(parsed)) {
-                        backtestTrades = parsed;
-                        localStorage.setItem('original_journal_trades', JSON.stringify(backtestTrades));
+                    if (parsed && Array.isArray(parsed.trades)) {
+                        liveTrades = parsed.trades;
+                        totalDeposits = parsed.deposits || 0;
+                        localStorage.setItem('live_journal_trades', JSON.stringify(liveTrades));
+                        localStorage.setItem('live_journal_deposits', totalDeposits);
                         updateDashboard();
-                        alert("Journal history imported successfully!");
+                        alert("Live Portfolio structural profile synchronized successfully!");
                     } else {
-                        alert("Invalid backup configuration layout.");
+                        alert("Invalid layout parsing profile data.");
                     }
                 } catch(err) {
-                    alert("Failure parsing backup profile data.");
+                    alert("Failure executing schema translation mapping.");
                 }
             };
             reader.readAsText(file);
         }
 
         function clearWorkspace() {
-            if (confirm("Are you completely sure you want to clear your entire trading journal history? This action cannot be undone.")) {
-                backtestTrades = [];
-                localStorage.removeItem('original_journal_trades');
+            if (confirm("Are you completely sure you want to clear your live trading history and deposits? This action cannot be reversed.")) {
+                liveTrades = [];
+                totalDeposits = 0;
+                localStorage.removeItem('live_journal_trades');
+                localStorage.removeItem('live_journal_deposits');
                 
                 if (db) {
                     const transaction = db.transaction([storeName], "readwrite");
