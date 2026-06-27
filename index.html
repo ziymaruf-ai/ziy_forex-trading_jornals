@@ -60,6 +60,51 @@
         </div>
     </header>
 
+    <!-- 💰 HIGHLY VISIBLE DEPOSIT ENGINE GATEWAY (ከላይ ጎልቶ እንዲታይ የተደረገ) -->
+    <div class="w-full bg-slate-900 dark:bg-[#16171d] border-2 border-emerald-500 p-6 rounded-xl mb-6 grid grid-cols-1 lg:grid-cols-3 gap-6 items-center shadow-xl">
+        <div class="lg:col-span-2">
+            <h2 class="text-lg font-black text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-money-bill-transfer text-emerald-500 text-xl"></i> የገንዘብ ዲፖዚት ማድረጊያ (DEPOSIT FUNDS)
+            </h2>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                ወደ ትሬዲንግ አካውንትህ ያስገባኸውን ገንዘብ እዚህ መመዝገብ ትችላለህ። ወደ ብሮከርህ ገጽ በቀጥታ ለመሄድ ደግሞ እነዚህን ሊንኮች ተጠቀም፦
+            </p>
+            <div class="flex flex-wrap gap-3">
+                <a href="https://www.exness.com" target="_blank" class="bg-amber-500 hover:bg-amber-400 text-black text-xs font-black px-4 py-2.5 rounded flex items-center gap-1.5 transition shadow">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Exness Deposit
+                </a>
+                <a href="https://www.bybit.com" target="_blank" class="bg-zinc-800 hover:bg-zinc-700 text-amber-400 border border-amber-500/30 text-xs font-black px-4 py-2.5 rounded flex items-center gap-1.5 transition shadow">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Bybit Deposit
+                </a>
+                <a href="https://www.okx.com" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-black px-4 py-2.5 rounded flex items-center gap-1.5 transition shadow">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> OKX Deposit
+                </a>
+            </div>
+        </div>
+        
+        <!-- የዲፖዚት መመዝገቢያ ፎርም -->
+        <div class="w-full bg-[#0d0e12] p-4 rounded-lg border border-emerald-500/30">
+            <form id="depositForm" onsubmit="handleLiveDeposit(event)" class="flex flex-col gap-3 text-xs">
+                <div>
+                    <label class="block font-bold text-emerald-400 mb-1">የገንዘብ መጠን (Amount in USD)</label>
+                    <input type="number" id="depositAmount" placeholder="ဥምሳሌ: 500" min="1" step="0.01" class="w-full p-2.5 rounded input-field font-mono font-bold border border-emerald-500/50 bg-[#16171d] text-white" required>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-400 mb-1">ብሮከር / ዋሌት (Account)</label>
+                    <select id="depositAccountType" class="w-full p-2.5 rounded input-field bg-[#16171d] border border-slate-700 text-white">
+                        <option value="Exness">Exness Live (Forex)</option>
+                        <option value="Bybit">Bybit Funding (Crypto)</option>
+                        <option value="OKX">OKX Wallet (Crypto)</option>
+                        <option value="FundedNext">FundedNext (Challenge)</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 rounded transition cursor-pointer uppercase text-[11px] tracking-wider shadow-lg">
+                    <i class="fa-solid fa-plus-circle"></i> ዲፖዚት መዝግብ
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Account Balances Configuration -->
     <div class="main-card p-4 rounded-xl mb-6 grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
         <div>
@@ -80,48 +125,6 @@
         <div class="p-2 border-l border-slate-200 dark:border-gray-800 pl-4">
             <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Net P&L Result</span>
             <div id="statNetPL" class="text-lg font-black mt-1 text-emerald-500 font-mono">$0.00</div>
-        </div>
-    </div>
-
-    <!-- Live Deposit Engine Box -->
-    <div class="main-card p-5 rounded-xl mb-6 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start border border-sky-500/20 bg-gradient-to-br from-sky-500/5 to-transparent">
-        <div class="lg:col-span-2">
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-2 flex items-center gap-2">
-                <i class="fa-solid fa-wallet text-emerald-500"></i> ፈንድ መጨመሪያ (Deposit Funds Gateway)
-            </h3>
-            <p class="text-xs text-slate-400 leading-relaxed mb-4">
-                ወደ ትሬዲንግ አካውንትህ ወይም ክሪፕቶ ዋሌትህ ገንዘብ ስታስገባ በጆርናልህ ላይ እንዲመዘገብና ባላንስህ ላይ እንዲደመር እዚህ ያስገቡ። በቀጥታ ወደ ብሮከርህ ገጽ ለመሄድ ከታች ያሉትን ሊንኮች ተጠቀም።
-            </p>
-            <div class="flex flex-wrap gap-2">
-                <a href="https://www.exness.com" target="_blank" class="bg-amber-500 hover:bg-amber-400 text-black text-xs font-black px-4 py-2 rounded flex items-center gap-1.5 transition">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Exness Deposit
-                </a>
-                <a href="https://www.bybit.com" target="_blank" class="bg-zinc-900 hover:bg-zinc-800 text-amber-500 border border-amber-500/30 text-xs font-black px-4 py-2 rounded flex items-center gap-1.5 transition">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Bybit Deposit
-                </a>
-                <a href="https://www.okx.com" target="_blank" class="bg-white hover:bg-slate-100 text-black text-xs font-black px-4 py-2 rounded flex items-center gap-1.5 transition">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i> OKX Deposit
-                </a>
-            </div>
-        </div>
-        <div class="w-full bg-slate-900/40 p-4 rounded-lg border border-slate-200 dark:border-gray-800">
-            <form id="depositForm" onsubmit="handleLiveDeposit(event)" class="flex flex-col gap-2.5 text-xs">
-                <div>
-                    <label class="block font-bold text-slate-400 mb-1">Deposit Amount (USD)</label>
-                    <input type="number" id="depositAmount" placeholder="e.g. 500" min="1" step="0.01" class="w-full p-2 rounded input-field font-mono font-bold" required>
-                </div>
-                <div>
-                    <label class="block font-bold text-slate-400 mb-1">Destination Account</label>
-                    <select id="depositAccountType" class="w-full p-2 rounded input-field">
-                        <option value="Exness">Exness Live (Forex)</option>
-                        <option value="Bybit">Bybit Funding (Crypto)</option>
-                        <option value="FundedNext">FundedNext (Challenge Account)</option>
-                    </select>
-                </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded transition cursor-pointer uppercase text-[11px] tracking-wider">
-                    <i class="fa-solid fa-plus-circle"></i> ዲፖዚት መዝግብ
-                </button>
-            </form>
         </div>
     </div>
 
@@ -222,7 +225,7 @@
                 </div>
 
                 <div class="border-t border-slate-100 dark:border-gray-800 my-1 pt-2">
-                    <label class="block font-bold mb-1 text-sky-600 dark:text-cyan-400">Chart Images (Up to 5 photos - Saved in IndexedDB)</label>
+                    <label class="block font-bold mb-1 text-sky-600 dark:text-cyan-400">Chart Images (Up to 3 photos)</label>
                     <div class="flex flex-col gap-1.5 mt-2 text-[11px]">
                         <div><span class="text-slate-400 font-medium">1. HTF Direction:</span> <input type="file" id="imgSetup1" accept="image/*" class="text-slate-500 text-[10px]"></div>
                         <div><span class="text-slate-400 font-medium">2. Execution Trigger:</span> <input type="file" id="imgSetup2" accept="image/*" class="text-slate-500 text-[10px]"></div>
